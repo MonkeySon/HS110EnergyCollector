@@ -1,0 +1,10 @@
+[Unit]
+Description=Collect energy data from TP-Link HS110 Smart Plug
+
+[Service]
+WorkingDirectory={WORKDIR}
+ExecStart=/usr/bin/python3 {WORKDIR}HS110EnergyCollector.py
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
