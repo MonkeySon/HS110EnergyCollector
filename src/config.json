@@ -1,0 +1,11 @@
+{
+    "hs110_ip": "",
+    "interval_sec": 1.0,
+    "influxDB": {
+        "url": "",
+        "token": "",
+        "org": "",
+        "bucket": "",
+        "measurement": ""
+    }
+}
