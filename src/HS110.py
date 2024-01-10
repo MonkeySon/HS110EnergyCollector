@@ -1,7 +1,7 @@
 import json
 import struct
 import socket
-socket.setdefaulttimeout(2.0)
+socket.setdefaulttimeout(5.0)
 
 
 class HS110:
