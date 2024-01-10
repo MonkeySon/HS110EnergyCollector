@@ -9,6 +9,7 @@ class HS110:
     def __init__(self, ip, port=9999):
         self.ip = ip
         self.port = port
+        self.sock = None
 
         # Available commands in cleartext
         self.COMMANDS = {
@@ -54,12 +55,31 @@ class HS110:
         return plaintext.decode()
 
     def _write_command(self, encrypted_command):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((self.ip, self.port))
-        sock.send(encrypted_command)
-        data = sock.recv(4096)
-        sock.close()
+        self._verify_socket_connected()
+        self.sock.sendall(encrypted_command)
+        data = self.sock.recv(4096)
         return self._decrypt(data[4:])
+
+    def _verify_socket_connected(self):
+        if self.sock is None:
+            raise Exception('Socket not connected!')
+
+    def connect(self):
+        # Disconnect first, if connected
+        self.disconnect()
+        # Connect
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            self.sock.connect((self.ip, self.port))
+        except Exception as e:
+            self.sock = None
+            raise e
+
+    def disconnect(self):
+        if self.sock is not None:
+            self.sock.shutdown(socket.SHUT_RDWR)
+            self.sock.close()
+            self.sock = None
 
     def get_info(self):
         data = self._write_command(self.COMMANDS['info'])
