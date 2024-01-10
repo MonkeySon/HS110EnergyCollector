@@ -46,6 +46,7 @@ def handle_reconnect(retries=10):
     for _ in range(retries):
         try:
             hs110.connect()
+            print('Reconnected!')
             return
         except socket.timeout:
             print('Reconnect timed out, retrying ...')
